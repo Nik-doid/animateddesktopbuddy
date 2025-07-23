@@ -1,7 +1,7 @@
 import sys
 import psutil
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtGui import QMovie, QPainter
+from PyQt5.QtGui import QMovie, QPainter, QImage
 from PyQt5.QtCore import Qt, QTimer, QRect
 
 class CatWidget(QWidget):
@@ -24,12 +24,13 @@ class CatWidget(QWidget):
         height = full_size.height()
 
         # Crop 60% from top, and 15% from both left and right
-        left_crop = int(width * 0.2)
-        right_crop = int(width * 0.2)
+        left_crop = int(width * 0.35)
+        right_crop = int(width * 0.4)
         top_crop = int(height * 0.6)
+        bot_crop = int(height * 0.1)
 
         new_width = width - left_crop - right_crop
-        new_height = height - top_crop
+        new_height = height - top_crop - bot_crop
 
         self.crop_rect = QRect(left_crop, top_crop, new_width, new_height)
         self.resize(self.crop_rect.size())
@@ -54,7 +55,19 @@ class CatWidget(QWidget):
         frame = self.movie.currentPixmap()
         if not frame.isNull():
             cropped = frame.copy(self.crop_rect)
-            painter.drawPixmap(0, 0, cropped)
+
+        # Convert to QImage to manipulate pixels
+            img = cropped.toImage().convertToFormat(QImage.Format_ARGB32)
+
+            for y in range(img.height()):
+                for x in range(img.width()):
+                    color = img.pixelColor(x, y)
+                    if color.red() < 10 and color.green() < 10 and color.blue() < 10:
+                        color.setAlpha(0)  # Make black fully transparent
+                        img.setPixelColor(x, y, color)
+
+            painter.drawImage(0, 0, img)
+
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -69,6 +82,6 @@ class CatWidget(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    cat = CatWidget("cat-unscreen.gif") #replace file with your gif try gif with transparent bg
+    cat = CatWidget("a.gif") #replace file with your gif try gif with transparent bg
     cat.show()
     sys.exit(app.exec_())
