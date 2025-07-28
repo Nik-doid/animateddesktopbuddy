@@ -38,6 +38,7 @@ pip install -r requirements.txt
 python3 runcat_linux.py
 
 ```
+
 Dont forget to add a gif file in root and replace the file name in runcat_linux.py.[GIF](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHVhbXVhbmtyYXU0ZDZ5ajRzdjkwb3ZiOW84ZzhhNDIwbjNxNWx6eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aiqIqtW2utnkk/giphy.gif)
 Gif that i am using.(Make the background transparent)
 
@@ -56,3 +57,7 @@ Enjoy your new desktop buddy!
 ## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## Demo
+
+![Demo](demo.gif)
